@@ -7,7 +7,7 @@ Website lelang proyek IT: klien memasang proyek, developer menawar, klien memili
 - **Hanya untuk komputer lokal atau lingkungan belajar.** Jangan dipasang di server publik atau internet.
 - Konfigurasi bawaan memakai database `root` dengan password kosong. Itu hanya aman di komputer lokal.
 - Tidak ada pembatasan percobaan login (rate limit).
-- Tidak ada header keamanan `X-Frame-Options` maupun `Content-Security-Policy`.
+- Header keamanan dasar (`X-Frame-Options`, `Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`) sudah ditambahkan pada Episode 2.
 - Jangan memasukkan data pribadi atau password asli.
 
 ## Fitur
@@ -57,6 +57,23 @@ Data awal berisi akun fiktif berdomain `example.com`: satu admin (`admin@example
 
 - `src/index.php`: seluruh aplikasi (routing lewat `?page=`)
 - `src/database.sql`: skema dan data dummy
+
+## Hasil Pengujian Keamanan (Episode 2: The Phantom Vulnerability)
+
+NIM: 252410102106
+
+Pengamanan yang diterapkan pada aplikasi:
+
+- **Autentikasi:** password disimpan dengan `password_hash` dan diverifikasi dengan `password_verify`.
+- **Session:** cookie `HttpOnly` dan `SameSite=Lax`, `session_regenerate_id` saat login, sesi dihancurkan saat logout (hanya lewat POST).
+- **CSRF:** token acak di semua form dan diperiksa pada setiap request POST.
+- **SQL Injection:** seluruh query memakai prepared statement.
+- **XSS:** seluruh output dienkode dengan `htmlspecialchars` (output encoding), termasuk kolom deskripsi proyek.
+- **Security headers:** `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, dan `Content-Security-Policy`.
+
+Hasil scan OWASP ZAP terhadap aplikasi lokal (`http://localhost:8000`): **tidak ada alert High maupun Critical**. Komentar NIM terlihat di kode di sebelah jendela ZAP.
+
+![Hasil scan OWASP ZAP](Aulia_2106.png)
 
 ## Panduan pemakaian
 
