@@ -7,6 +7,13 @@ ini_set('display_errors', '0');
 date_default_timezone_set('Asia/Jakarta');
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// NIM: 252410102106
+header_remove('X-Powered-By');
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: no-referrer');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
+
 const ROLES = ['klien', 'developer', 'admin'];
 const SELF_ROLES = ['klien', 'developer'];
 const STATUS = ['terbuka', 'ditutup'];
